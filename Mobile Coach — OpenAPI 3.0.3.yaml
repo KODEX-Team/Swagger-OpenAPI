@@ -1,0 +1,792 @@
+openapi: 3.0.3
+
+info:
+  title: Mobile Coach - OpenAPI
+  version: 0.0.1
+
+servers:
+  - url: https://localhost:8008/api/v1/
+    description: Stage
+
+tags:
+  - name: Users
+    description: Operations with User
+  - name: Exercises
+    description: Info about exercise
+  - name: User notification
+    description: Info about user notification
+  - name: Ration
+    description: Info about ration
+
+
+
+
+
+
+paths:
+  
+  
+  
+  /users:
+
+
+
+    get:
+      tags:
+        - Users
+      summary: Return all users
+      operationId: getAllUsers
+      responses:
+        '200':
+          description: Succesful return all users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '503':
+          description: The service is unavailable
+
+
+
+    post:
+      tags:
+        - Users
+      summary: Create new user
+      operationId: createUser
+      requestBody:
+        required: True
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Succesful added user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+            description: Invalid body request
+        '404':
+          description: UserId not found
+        '503':
+          description: The service is unavailable
+
+
+
+  /users/{userId}:
+
+
+
+    get:
+      tags:
+        - Users
+      summary: Get a user by ID
+      description: Returns a user by their ID
+      parameters:
+        - in: path
+          name: userId
+          description: The ID of the user to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 10
+      responses:
+        200:
+          description: The requested user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        404:
+          description: User not found
+
+
+
+    put:
+      tags:
+        - Users
+      summary: Update a user
+      description: Updates a user's information
+      parameters:
+        - in: path
+          name: userId
+          description: The ID of the user to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 10
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        200:
+          description: The updated user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        404:
+          description: User not found
+
+
+
+    delete:
+      tags:
+        - Users
+      summary: Delete a user
+      description: Deletes a user account
+      parameters:
+        - in: path
+          name: userId
+          description: The ID of the user to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 10
+      responses:
+        204:
+          description: User deleted successfully
+        404:
+          description: User not found
+
+
+
+  /users/{userId}/userState:
+
+
+
+    get:
+      tags:
+        - Users
+      summary: Return user states
+      operationId: getAllUserState
+      parameters:
+        - in: path
+          name: userId
+          description: The ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 10
+      responses:
+        '200':
+          description: Succesful return all state
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserState'
+        '503':
+          description: The service is unavailable
+
+
+
+    post:
+      tags:
+        - Users
+      summary: Create new user state
+      operationId: createUserState
+      requestBody:
+        required: True
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserState'
+      parameters:
+        - in: path
+          name: userId
+          description: The ID of the user
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 10
+      responses:
+        '200':
+          description: Succesful added  for state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserState'
+        '400':
+            description: Invalid body request
+        '404':
+          description: UserId not found
+        '503':
+          description: The service is unavailable
+
+
+
+  /exercises:
+
+
+
+    get:
+      tags:
+        - Exercises
+      summary: Get all exercises
+      description: Returns a list of all available exercises
+      responses:
+        200:
+          description: A list of exercises
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Exercise"
+
+
+
+  /exercises/{id}:
+
+
+
+    put:
+      tags:
+        - Exercises
+      summary: Update an exercise by ID
+      operationId: updateExerciseById
+      parameters:
+        - name: id
+          in: path
+          description: Exercise ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 10
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Exercise"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Exercise"
+        '400':
+          description: Bad request
+        '404':
+          description: Exercise not found
+        '500':
+          description: Internal Server Error
+
+
+
+    get:
+      tags:
+        - Exercises
+      summary: Get an exercise by ID
+      description: Returns an exercise by its ID
+      parameters:
+        - in: path
+          name: id
+          description: The ID of the exercise to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 10
+      responses:
+        200:
+          description: The requested exercise
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Exercise"
+        404:
+          description: Exercise not found
+
+
+
+    delete:
+      tags:
+        - Exercises
+      summary: Delete an exercise by ID
+      operationId: deleteExerciseById
+      parameters:
+        - name: id
+          in: path
+          description: Exercise ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: No content
+        '404':
+          description: Exercise not found
+        '500':
+          description: Internal Server Error
+
+
+
+  /users/{userId}/exercises:
+
+
+
+    get:
+      tags:
+        - Exercises
+      summary: Get user's exercises
+      description: Returns a list of exercises that a user has performed
+      parameters:
+        - in: path
+          name: userId
+          description: The ID of the user whose exercises to retrieve
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 10
+      responses:
+        200:
+          description: A list of exercises
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Exercise"
+        404:
+          description: User not found
+
+  
+  
+  /users/{userId}/exercises/{id}:
+
+
+
+    post:
+      tags:
+        - Exercises
+      summary: Add an exercise to user's performed exercises
+      description: Adds an exercise to a user's list of performed exercises
+      parameters:
+        - in: path
+          name: userId
+          description: The ID of the user to add the exercise to
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 10
+        - in: path
+          name: id
+          description: The ID of the exercise to add
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 10
+      requestBody:
+        required: True
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Exercise'
+      responses:
+        201:
+          description: The added exercise
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Exercise"
+        404:
+          description: User or exercise not found
+
+  
+  
+  /notifications/{id}:
+
+
+
+    get:
+      tags:
+        - User notification
+      summary: Get notification by ID
+      description: Returns a single notification
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the notification to return
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notification"
+        '404':
+          description: Notification not found
+
+
+
+    put:
+      tags:
+        - User notification
+      summary: Update notification by ID
+      description: Updates an existing notification
+      parameters:
+        - in: path
+          name: id
+          description: ID of the notification to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 10
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Notification"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notification"
+        '400':
+          description: Invalid notification data
+        '404':
+          description: Notification not found
+
+
+
+    delete:
+      tags:
+        - User notification
+      summary: Delete a notification by ID
+      operationId: deleteNotificationById
+      parameters:
+        - name: id
+          in: path
+          description: Notification ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: No content
+        '404':
+          description: Notification not found
+        '500':
+          description: Internal Server Error
+
+
+
+  /notifications:
+
+
+
+    get:
+      tags:
+        - User notification
+      summary: Get all notifications
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+
+
+
+    post:
+      tags:
+        - User notification
+      summary: Create a new notification
+      requestBody:
+        description: Notification object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+
+
+
+  /rations:
+
+
+
+    get:
+      tags:
+      - Ration
+      summary: Get all rations
+      responses:
+        200:
+          description: OK
+
+
+
+    post:
+      tags:
+      - Ration
+      summary: Add a new ration
+      requestBody:
+        description: Ration object to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Ration"
+      responses:
+        200:
+          description: OK
+
+
+
+  /rations/{id}:
+
+
+
+    get:
+      tags:
+        - Ration
+      summary: Get a single ration by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of the ration to retrieve
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+
+
+
+    put:
+      tags:
+        - Ration
+      summary: Update an existing ration by ID
+      parameters:
+      - name: id
+        in: path
+        description: ID of the ration to retrieve
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        description: Ration object to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Ration"
+      responses:
+        200:
+          description: OK
+
+
+
+    delete:
+      tags:
+        - Ration
+      summary: Delete a ration by ID
+      parameters:
+
+        - name: id
+          in: path
+          description: ID of the ration to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+
+
+
+
+
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+          example: 10
+        username:
+          type: string
+          example: theAuctioneer
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
+        phone:
+          type: string
+          example: '+380954176563'
+        user_states:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserState"
+
+
+
+    UserState:
+      type: object
+      properties:
+        date_creating:
+          type: string
+          example: '2021-02-28'
+        weight:
+          type: number
+          format: float
+          example: '65.6'
+        height:
+          type: number
+          format: float
+          example: '166.1'      
+        goal_weight:
+          type: number
+          format: float
+          example: '65.6'
+        status:
+          type: string
+          enum:
+            - beginner
+            - middle
+            - master
+
+
+
+    Exercise:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: 'Deadlift'
+        youtube_url:
+          type: string
+          example: 'https://youtu.be/XxWcirHIwVo'
+        difficult:
+          type: string
+          enum:
+            - easy
+            - middle
+            - hard
+        short_description:
+          type: string
+          example: 'The deadlift is a weight training exercise in which a loaded barbell or bar'
+
+
+
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+        name:
+          type: string
+          example: "Eat your lunch"
+        user:
+          $ref: "#/components/schemas/User"
+        text:
+          type: string
+          example: "It's time for you to train"
+        time:
+          type: string
+          example: '2021-02-28 20:15:21'
+        not_type:
+          type: string
+          enum:
+            - eating
+            - training
+            - sleeping
+            - special
+        status:
+          type: string
+          enum:
+            - sent
+            - checked
+            - ingored
+            - waiting
+
+
+
+    Ingredient:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+        name:
+          type: string
+          example: 'Eggs'
+        count_grams:
+          type: integer
+          example: 100
+
+
+
+    Ration:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+        name:
+          type: string
+          enum:
+            - lunch
+            - dinner
+            - breakfast
+            - supper
+        feeling:
+          type: string
+          enum:
+            - Liked
+            - Disliked
+            - None
+        water:
+          type: number
+          format: float
+          example: 0.5
+        ingredients:
+          type: array
+          items:
+            $ref: "#/components/schemas/Ingredient"
